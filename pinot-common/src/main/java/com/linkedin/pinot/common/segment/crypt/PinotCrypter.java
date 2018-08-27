@@ -15,23 +15,36 @@
  */
 package com.linkedin.pinot.common.segment.crypt;
 
-import java.net.URI;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+import org.apache.commons.configuration.Configuration;
 
 
 /**
  * The PinotCrypter will encrypt and decrypt segments when they are downloaded. This class is especially useful in cases
  * where segments cannot be stored unencrypted in storage.
  */
-public abstract class PinotCrypter {
+public interface PinotCrypter {
+  /**
+   * Initializes configurations
+   * @param credentials
+   * @param config
+   */
+  void init(Map<String, byte[]> credentials, Configuration config);
   /**
    * Encrypts data.
-   * @param uri location of data to be encrypted
+   * @param srcFile location of data to be encrypted
+   * @param dstFile location of encrypted data
+   * @Exception throws an IOException if encrypt fails
    */
-  public abstract void encrypt(URI uri);
+  void encrypt(File srcFile, File dstFile) throws IOException;
 
   /**
    * Decrypts data.
-   * @param uri location of data to be decrypted
+   * @param srcFile location of original data to be decrypted
+   * @param dstFile location of decrypted data
+   * @Exception throws an IOException if decrypt fails
    */
-  public abstract void decrypt(URI uri);
+  void decrypt(File srcFile, File dstFile) throws IOException;
 }
