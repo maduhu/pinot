@@ -46,8 +46,8 @@ public class PinotFSFactoryTest {
   @Test
   public void testCustomizedSegmentFetcherFactory() throws Exception {
     Configuration config = new PropertiesConfiguration();
-    config.addProperty("file", LocalPinotFS.class.getName());
-    config.addProperty("test", TestPinotFS.class.getName());
+    config.addProperty("class.file", LocalPinotFS.class.getName());
+    config.addProperty("class.test", TestPinotFS.class.getName());
     PinotFSFactory.init(config);
     PinotFS testPinotFS = PinotFSFactory.create("test");
 
