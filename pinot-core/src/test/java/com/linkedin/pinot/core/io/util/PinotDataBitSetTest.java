@@ -28,6 +28,25 @@ public class PinotDataBitSetTest {
   private static final int NUM_ITERATIONS = 1000;
 
   @Test
+  public void testGetNumBitsPerValue() {
+    for (int i = 0; i < NUM_ITERATIONS; i++) {
+      int cardinality = RANDOM.nextInt(Integer.MAX_VALUE) + 1;
+      int actual = PinotDataBitSet.getNumBitsPerValue(cardinality);
+      if (cardinality == 1) {
+        Assert.assertEquals(actual, 1);
+      } else {
+        int expected = 0;
+        int remaining = cardinality - 1;
+        while (remaining > 0) {
+          remaining >>>= 1;
+          expected++;
+        }
+        Assert.assertEquals(actual, expected);
+      }
+    }
+  }
+
+  @Test
   public void testReadWriteInt() throws IOException {
     int numBitsPerValue = RANDOM.nextInt(10) + 1;
     int maxAllowedValue = 1 << numBitsPerValue;

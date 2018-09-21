@@ -39,6 +39,20 @@ public final class PinotDataBitSet implements Closeable {
     }
   }
 
+  public static int getNumBitsPerValue(int cardinality) {
+    // Use at least one bit even there is only one possible value
+    if (cardinality <= 2) {
+      return 1;
+    }
+    int numBitsPerValue = Byte.SIZE;
+    int remaining = cardinality - 1;
+    while (remaining > 0xFF) {
+      remaining >>>= Byte.SIZE;
+      numBitsPerValue += Byte.SIZE;
+    }
+    return numBitsPerValue - FIRST_BIT_SET[remaining];
+  }
+
   private final PinotDataBuffer _dataBuffer;
 
   public PinotDataBitSet(PinotDataBuffer dataBuffer) {
